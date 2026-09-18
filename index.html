@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ジョブカンATS AI面接CSVエクスポート - 簡単セットアップ</title>
+  <title>ジョブカンATS AI効率化ツール集</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
@@ -13,12 +13,12 @@
       padding: 40px 20px;
     }
     .container {
-      max-width: 680px;
+      max-width: 780px;
       margin: 0 auto;
       background: #ffffff;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      padding: 36px;
+      padding: 36px 40px;
       border: 1px solid #e2e8f0;
     }
     h1 {
@@ -26,27 +26,24 @@
       color: #0f172a;
       margin-top: 0;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .desc {
       color: #64748b;
       font-size: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
     .step-card {
       background: #f1f5f9;
       border-radius: 8px;
-      padding: 18px 22px;
-      margin-bottom: 20px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
       border-left: 4px solid #3b82f6;
     }
     .step-title {
       font-weight: bold;
-      font-size: 15px;
+      font-size: 14px;
       color: #1e293b;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .step-desc {
       font-size: 13px;
@@ -60,15 +57,53 @@
       font-size: 12px;
       font-family: monospace;
       font-weight: bold;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .tool-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .tool-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+    .badge {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .badge-new {
+      background: #dcfce7;
+      color: #15803d;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .tool-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 14px;
     }
     .drag-area {
       text-align: center;
-      padding: 30px;
-      background: #eff6ff;
-      border: 2px dashed #93c5fd;
-      border-radius: 10px;
-      margin: 20px 0;
+      padding: 20px;
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
     }
     .bookmarklet-btn {
       display: inline-block;
@@ -76,66 +111,100 @@
       color: #ffffff !important;
       text-decoration: none !important;
       font-weight: bold;
-      font-size: 16px;
-      padding: 14px 28px;
+      font-size: 15px;
+      padding: 12px 24px;
       border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
       cursor: grab;
       transition: all 0.2s;
     }
     .bookmarklet-btn:hover {
       background: #1d4ed8;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
       transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
     }
-    .notice {
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      color: #92400e;
-      border-radius: 6px;
-      padding: 12px 16px;
+    .bookmarklet-btn-green {
+      background: #059669;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);
+    }
+    .bookmarklet-btn-green:hover {
+      background: #047857;
+      box-shadow: 0 6px 14px rgba(5, 150, 105, 0.35);
+    }
+    .usage-list {
       font-size: 13px;
-      margin-top: 24px;
+      color: #475569;
+      margin: 14px 0 0 0;
+      padding-left: 20px;
+    }
+    .usage-list li {
+      margin-bottom: 4px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🤖 AI面接データ一括エクスポート</h1>
-    <div class="desc">ジョブカン採用管理（ATS）から、AI面接の文字起こし・要約・評価スコアを1クリックでCSVダウンロードできるツールです。</div>
+    <h1>🚀 ジョブカンATS AI業務効率化ツール集</h1>
+    <div class="desc">ジョブカン採用管理の業務を大幅に自動化・高度化するブックマークレットです。</div>
 
     <div class="step-card">
-      <div class="step-title">STEP 1: ブックマークバーを表示する</div>
+      <div class="step-title">事前準備: ブックマークバーを表示</div>
       <div class="step-desc">
-        ブラウザ上部にブックマークバーが表示されていない場合は、ショートカットキーを押して表示してください。<br>
-        ・Mac: <span class="kbd">Cmd</span> + <span class="kbd">Shift</span> + <span class="kbd">B</span><br>
-        ・Windows: <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">B</span>
+        ブラウザ上部にブックマークバーが表示されていない場合は、ショートカットキーで表示してください。<br>
+        ・Mac: <span class="kbd">Cmd</span> + <span class="kbd">Shift</span> + <span class="kbd">B</span> ｜ Windows: <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">B</span>
       </div>
     </div>
 
-    <div class="drag-area">
-      <div style="font-size: 13px; font-weight: bold; color: #1e40af; margin-bottom: 12px;">
-        👇 下の青いボタンをマウスで掴んで、ブラウザの「ブックマークバー」にドラッグ＆ドロップしてください
+    <!-- ツール1: AI面接評価＆上申レポート自動投稿 -->
+    <div class="tool-box" style="border: 2px solid #10b981; background: #fafdfb;">
+      <div class="tool-header">
+        <div class="tool-title">① 面接文字起こし AI評価＆西村氏上申書生成</div>
+        <span class="badge-new">NEW（アルサーガ基準準拠）</span>
       </div>
-      <a class="bookmarklet-btn" href="javascript:%28async%20function%28%29%20%7B%20if%20%28%21location.hostname.includes%28%27ats.jobcan.jp%27%29%29%20%7B%20alert%28%27%E3%82%B8%E3%83%A7%E3%83%96%E3%82%AB%E3%83%B3%E6%8E%A1%E7%94%A8%E7%AE%A1%E7%90%86%EF%BC%88ats.jobcan.jp%EF%BC%89%E3%81%AE%E7%94%BB%E9%9D%A2%E3%81%A7%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%27%29%3B%20return%3B%20%7D%20const%20overlayId%20%3D%20%27jbc_ai_interview_exporter_ui%27%3B%20let%20overlay%20%3D%20document.getElementById%28overlayId%29%3B%20if%20%28overlay%29%20overlay.remove%28%29%3B%20overlay%20%3D%20document.createElement%28%27div%27%29%3B%20overlay.id%20%3D%20overlayId%3B%20overlay.style.cssText%20%3D%20%60%20position%3A%20fixed%3B%20top%3A%2020px%3B%20right%3A%2020px%3B%20width%3A%20340px%3B%20z-index%3A%20999999%3B%20background%3A%20%23ffffff%3B%20border-radius%3A%208px%3B%20box-shadow%3A%200%204px%2020px%20rgba%280%2C0%2C0%2C0.25%29%3B%20padding%3A%2018px%3B%20font-family%3A%20-apple-system%2C%20BlinkMacSystemFont%2C%20%22Segoe%20UI%22%2C%20Roboto%2C%20sans-serif%3B%20color%3A%20%23333%3B%20font-size%3A%2013px%3B%20border%3A%201px%20solid%20%23e2e8f0%3B%20%60%3B%20overlay.innerHTML%20%3D%20%60%20%3Cdiv%20style%3D%22font-weight%3A%20bold%3B%20font-size%3A%2014px%3B%20margin-bottom%3A%208px%3B%20color%3A%20%231e293b%3B%22%3E%20%F0%9F%A4%96%20AI%E9%9D%A2%E6%8E%A5%E3%83%87%E3%83%BC%E3%82%BF%E4%B8%80%E6%8B%AC%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%9D%E3%83%BC%E3%83%88%20%3C/div%3E%20%3Cdiv%20id%3D%22jbc_exp_status%22%20style%3D%22margin-bottom%3A%2010px%3B%20color%3A%20%23475569%3B%22%3E%E6%BA%96%E5%82%99%E4%B8%AD...%3C/div%3E%20%3Cdiv%20style%3D%22background%3A%20%23e2e8f0%3B%20border-radius%3A%204px%3B%20height%3A%208px%3B%20overflow%3A%20hidden%3B%20margin-bottom%3A%2012px%3B%22%3E%20%3Cdiv%20id%3D%22jbc_exp_bar%22%20style%3D%22background%3A%20%232563eb%3B%20width%3A%200%25%3B%20height%3A%20100%25%3B%20transition%3A%20width%200.2s%3B%22%3E%3C/div%3E%20%3C/div%3E%20%3Cbutton%20id%3D%22jbc_exp_close%22%20style%3D%22display%3A%20none%3B%20width%3A%20100%25%3B%20padding%3A%206px%200%3B%20background%3A%20%232563eb%3B%20color%3A%20%23fff%3B%20border%3A%20none%3B%20border-radius%3A%204px%3B%20cursor%3A%20pointer%3B%20font-weight%3A%20bold%3B%22%3E%E9%96%89%E3%81%98%E3%82%8B%3C/button%3E%20%60%3B%20document.body.appendChild%28overlay%29%3B%20const%20statusEl%20%3D%20document.getElementById%28%27jbc_exp_status%27%29%3B%20const%20barEl%20%3D%20document.getElementById%28%27jbc_exp_bar%27%29%3B%20const%20closeBtn%20%3D%20document.getElementById%28%27jbc_exp_close%27%29%3B%20closeBtn.onclick%20%3D%20%28%29%20%3D%3E%20overlay.remove%28%29%3B%20const%20updateProgress%20%3D%20%28text%2C%20percent%29%20%3D%3E%20%7B%20statusEl.innerText%20%3D%20text%3B%20barEl.style.width%20%3D%20percent%20%2B%20%27%25%27%3B%20%7D%3B%20try%20%7B%20updateProgress%28%27%E9%9D%A2%E6%8E%A5%E4%B8%80%E8%A6%A7%E3%82%92%E5%8F%96%E5%BE%97%E4%B8%AD...%27%2C%205%29%3B%20let%20targetPage%20%3D%201%3B%20const%20limit%20%3D%2050%3B%20const%20allInterviews%20%3D%20%5B%5D%3B%20while%20%28true%29%20%7B%20const%20res%20%3D%20await%20fetch%28%60/_/configs/ai_interview_configs/ai_interviews%3Ftarget_page%3D%24%7BtargetPage%7D%26limit%3D%24%7Blimit%7D%26sort_by%3Dcreated_at%26sort_order%3Ddesc%60%2C%20%7B%20headers%3A%20%7B%20%27Accept%27%3A%20%27application/json%27%2C%20%27X-Requested-With%27%3A%20%27XMLHttpRequest%27%20%7D%20%7D%29%3B%20if%20%28%21res.ok%29%20%7B%20if%20%28res.status%20%3D%3D%3D%20403%29%20throw%20new%20Error%28%27%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E6%A8%A9%E9%99%90%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%EF%BC%88%E7%AE%A1%E7%90%86%E8%80%85%E3%81%BE%E3%81%9F%E3%81%AF%E6%8E%A1%E7%94%A8%E6%8B%85%E5%BD%93%E8%80%85%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%A7%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%EF%BC%89%27%29%3B%20throw%20new%20Error%28%60%E4%B8%80%E8%A6%A7%E5%8F%96%E5%BE%97%E3%82%A8%E3%83%A9%E3%83%BC%3A%20HTTP%20%24%7Bres.status%7D%60%29%3B%20%7D%20const%20data%20%3D%20await%20res.json%28%29%3B%20const%20items%20%3D%20data.items%20%7C%7C%20%5B%5D%3B%20const%20totalCount%20%3D%20data.total_count%20%7C%7C%200%3B%20allInterviews.push%28...items%29%3B%20updateProgress%28%60%E4%B8%80%E8%A6%A7%E5%8F%96%E5%BE%97%E4%B8%AD%3A%20%24%7BallInterviews.length%7D%20/%20%24%7BtotalCount%7D%20%E4%BB%B6%60%2C%20Math.min%2820%2C%20Math.floor%28allInterviews.length%20/%20%28totalCount%20%7C%7C%201%29%20%2A%2020%29%29%29%3B%20if%20%28allInterviews.length%20%3E%3D%20totalCount%20%7C%7C%20items.length%20%3D%3D%3D%200%29%20break%3B%20targetPage%2B%2B%3B%20await%20new%20Promise%28r%20%3D%3E%20setTimeout%28r%2C%20100%29%29%3B%20%7D%20if%20%28allInterviews.length%20%3D%3D%3D%200%29%20%7B%20updateProgress%28%27%E5%AF%BE%E8%B1%A1%E3%81%AEAI%E9%9D%A2%E6%8E%A5%E3%83%87%E3%83%BC%E3%82%BF%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93%E3%81%A7%E3%81%97%E3%81%9F%E3%80%82%27%2C%20100%29%3B%20closeBtn.style.display%20%3D%20%27block%27%3B%20return%3B%20%7D%20const%20totalTarget%20%3D%20allInterviews.length%3B%20updateProgress%28%60%E8%A9%B3%E7%B4%B0%E5%8F%96%E5%BE%97%E4%B8%AD%20%280%20/%20%24%7BtotalTarget%7D%20%E4%BB%B6%29...%60%2C%2020%29%3B%20const%20concurrency%20%3D%205%3B%20const%20records%20%3D%20%5B%5D%3B%20let%20completed%20%3D%200%3B%20const%20fetchDetail%20%3D%20async%20%28item%29%20%3D%3E%20%7B%20const%20candId%20%3D%20item.candidate_id%3B%20let%20interviewDetail%20%3D%20null%3B%20let%20candidateDetail%20%3D%20null%3B%20if%20%28candId%29%20%7B%20try%20%7B%20const%20r1%20%3D%20await%20fetch%28%60/_/ai_interviews/%24%7BcandId%7D%60%2C%20%7B%20headers%3A%20%7B%20%27Accept%27%3A%20%27application/json%27%2C%20%27X-Requested-With%27%3A%20%27XMLHttpRequest%27%20%7D%20%7D%29%3B%20if%20%28r1.ok%29%20interviewDetail%20%3D%20await%20r1.json%28%29%3B%20%7D%20catch%20%28e%29%20%7B%7D%20try%20%7B%20const%20r2%20%3D%20await%20fetch%28%60/_/candidates/%24%7BcandId%7D%60%2C%20%7B%20headers%3A%20%7B%20%27Accept%27%3A%20%27application/json%27%2C%20%27X-Requested-With%27%3A%20%27XMLHttpRequest%27%20%7D%20%7D%29%3B%20if%20%28r2.ok%29%20candidateDetail%20%3D%20await%20r2.json%28%29%3B%20%7D%20catch%20%28e%29%20%7B%7D%20%7D%20let%20aiSummary%20%3D%20%27%27%3B%20const%20qaBlocks%20%3D%20%5B%5D%3B%20let%20videoUrl%20%3D%20%27%27%3B%20if%20%28interviewDetail%29%20%7B%20videoUrl%20%3D%20interviewDetail.videoUrl%20%7C%7C%20%27%27%3B%20aiSummary%20%3D%20%28interviewDetail.answer%20%26%26%20interviewDetail.answer.answer%29%20%7C%7C%20%27%27%3B%20const%20texts%20%3D%20%28interviewDetail.transcription%20%26%26%20interviewDetail.transcription.texts%29%20%7C%7C%20%5B%5D%3B%20texts.forEach%28%28t%2C%20i%29%20%3D%3E%20%7B%20let%20block%20%3D%20%60%E3%80%90%24%7Bt.heading%20%7C%7C%20%27%E8%B3%AA%E5%95%8F%27%20%2B%20%28i%20%2B%201%29%7D%E3%80%91%5Cn%E5%9B%9E%E7%AD%94%3A%20%24%7Bt.text%20%7C%7C%20%27%27%7D%60%3B%20%28t.deepQuestions%20%7C%7C%20%5B%5D%29.forEach%28dq%20%3D%3E%20%7B%20block%20%2B%3D%20%60%5Cn%20-%20%E6%B7%B1%E6%8E%98%E3%82%8A%E8%B3%AA%E5%95%8F%3A%20%24%7Bdq.question%20%7C%7C%20%27%27%7D%5Cn%20%E5%9B%9E%E7%AD%94%3A%20%24%7Bdq.answer%20%7C%7C%20%27%27%7D%60%3B%20%7D%29%3B%20qaBlocks.push%28block%29%3B%20%7D%29%3B%20%7D%20let%20jobOfferName%20%3D%20%27%27%3B%20let%20currentStepName%20%3D%20%27%27%3B%20let%20candidateStatus%20%3D%20%27%27%3B%20let%20pathName%20%3D%20%27%27%3B%20let%20applicationDate%20%3D%20%27%27%3B%20if%20%28candidateDetail%29%20%7B%20jobOfferName%20%3D%20%28candidateDetail.job_offer%20%26%26%20candidateDetail.job_offer.name%29%20%7C%7C%20%27%27%3B%20candidateStatus%20%3D%20candidateDetail.status%20%7C%7C%20%27%27%3B%20applicationDate%20%3D%20candidateDetail.application_date%20%7C%7C%20%27%27%3B%20currentStepName%20%3D%20%28candidateDetail.current_step%20%26%26%20candidateDetail.current_step.name%29%20%7C%7C%20%27%27%3B%20pathName%20%3D%20%28candidateDetail.path%20%26%26%20candidateDetail.path.name%29%20%7C%7C%20%27%27%3B%20%7D%20return%20%7B%20candidate_id%3A%20candId%2C%20candidate_name%3A%20item.candidate_name%2C%20interview_status%3A%20item.status%2C%20topic_id%3A%20item.interview_type_id%2C%20score%3A%20item.score%2C%20max_score%3A%20item.max_score%2C%20data_1_score%3A%20item.data_1_score%2C%20data_2_score%3A%20item.data_2_score%2C%20data_3_score%3A%20item.data_3_score%2C%20data_4_score%3A%20item.data_4_score%2C%20completed_at%3A%20item.completed_at%2C%20job_offer_name%3A%20jobOfferName%2C%20current_step_name%3A%20currentStepName%2C%20candidate_status%3A%20candidateStatus%2C%20path_name%3A%20pathName%2C%20application_date%3A%20applicationDate%2C%20ai_summary%3A%20aiSummary%2C%20qa_transcription%3A%20qaBlocks.join%28%27%5Cn%5Cn%27%29%2C%20video_url%3A%20videoUrl%20%7D%3B%20%7D%3B%20const%20queue%20%3D%20%5B...allInterviews%5D%3B%20const%20workers%20%3D%20Array.from%28%7B%20length%3A%20concurrency%20%7D%2C%20async%20%28%29%20%3D%3E%20%7B%20while%20%28queue.length%20%3E%200%29%20%7B%20const%20item%20%3D%20queue.shift%28%29%3B%20const%20rec%20%3D%20await%20fetchDetail%28item%29%3B%20records.push%28rec%29%3B%20completed%2B%2B%3B%20const%20pct%20%3D%2020%20%2B%20Math.floor%28%28completed%20/%20totalTarget%29%20%2A%2075%29%3B%20updateProgress%28%60%E8%A9%B3%E7%B4%B0%E5%8F%96%E5%BE%97%E4%B8%AD%3A%20%24%7Bcompleted%7D%20/%20%24%7BtotalTarget%7D%20%E4%BB%B6%60%2C%20pct%29%3B%20%7D%20%7D%29%3B%20await%20Promise.all%28workers%29%3B%20records.sort%28%28a%2C%20b%29%20%3D%3E%20%28b.candidate_id%20%7C%7C%200%29%20-%20%28a.candidate_id%20%7C%7C%200%29%29%3B%20updateProgress%28%27CSV%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E7%94%9F%E6%88%90%E4%B8%AD...%27%2C%2095%29%3B%20const%20fields%20%3D%20%5B%20%5B%27candidate_id%27%2C%20%27%E5%80%99%E8%A3%9C%E8%80%85ID%27%5D%2C%20%5B%27candidate_name%27%2C%20%27%E5%80%99%E8%A3%9C%E8%80%85%E5%90%8D%27%5D%2C%20%5B%27interview_status%27%2C%20%27%E9%9D%A2%E6%8E%A5%E7%8A%B6%E6%85%8B%27%5D%2C%20%5B%27topic_id%27%2C%20%27%E9%9D%A2%E6%8E%A5%E3%83%88%E3%83%94%E3%83%83%E3%82%AFID%27%5D%2C%20%5B%27score%27%2C%20%27%E7%B7%8F%E5%90%88%E3%82%B9%E3%82%B3%E3%82%A2%27%5D%2C%20%5B%27max_score%27%2C%20%27%E6%9C%80%E5%A4%A7%E3%82%B9%E3%82%B3%E3%82%A2%27%5D%2C%20%5B%27data_1_score%27%2C%20%27%E8%A9%95%E4%BE%A1%E8%BB%B81%E3%82%B9%E3%82%B3%E3%82%A2%27%5D%2C%20%5B%27data_2_score%27%2C%20%27%E8%A9%95%E4%BE%A1%E8%BB%B82%E3%82%B9%E3%82%B3%E3%82%A2%27%5D%2C%20%5B%27data_3_score%27%2C%20%27%E8%A9%95%E4%BE%A1%E8%BB%B83%E3%82%B9%E3%82%B3%E3%82%A2%27%5D%2C%20%5B%27data_4_score%27%2C%20%27%E8%A9%95%E4%BE%A1%E8%BB%B84%E3%82%B9%E3%82%B3%E3%82%A2%27%5D%2C%20%5B%27completed_at%27%2C%20%27%E9%9D%A2%E6%8E%A5%E5%AE%8C%E4%BA%86%E6%97%A5%E6%99%82%27%5D%2C%20%5B%27job_offer_name%27%2C%20%27%E6%B1%82%E4%BA%BA%E5%90%8D%27%5D%2C%20%5B%27current_step_name%27%2C%20%27%E7%8F%BE%E3%82%B9%E3%83%86%E3%83%83%E3%83%97%27%5D%2C%20%5B%27candidate_status%27%2C%20%27%E5%80%99%E8%A3%9C%E8%80%85%E9%81%B8%E8%80%83%E7%8A%B6%E6%85%8B%27%5D%2C%20%5B%27path_name%27%2C%20%27%E5%BF%9C%E5%8B%9F%E7%B5%8C%E8%B7%AF%27%5D%2C%20%5B%27application_date%27%2C%20%27%E5%BF%9C%E5%8B%9F%E6%97%A5%27%5D%2C%20%5B%27ai_summary%27%2C%20%27AI%E8%A6%81%E7%B4%84%27%5D%2C%20%5B%27qa_transcription%27%2C%20%27%E6%96%87%E5%AD%97%E8%B5%B7%E3%81%93%E3%81%97%E3%83%BBQ%26A%E5%85%A8%E6%96%87%27%5D%2C%20%5B%27video_url%27%2C%20%27%E9%9D%A2%E6%8E%A5%E5%8B%95%E7%94%BBURL%27%5D%20%5D%3B%20const%20escapeCsv%20%3D%20%28val%29%20%3D%3E%20%7B%20if%20%28val%20%3D%3D%3D%20null%20%7C%7C%20val%20%3D%3D%3D%20undefined%29%20return%20%27%22%22%27%3B%20const%20str%20%3D%20String%28val%29.replace%28/%22/g%2C%20%27%22%22%27%29%3B%20return%20%60%22%24%7Bstr%7D%22%60%3B%20%7D%3B%20let%20csvContent%20%3D%20%27%5CuFEFF%27%3B%20csvContent%20%2B%3D%20fields.map%28f%20%3D%3E%20%60%22%24%7Bf%5B1%5D%7D%22%60%29.join%28%27%2C%27%29%20%2B%20%27%5Cr%5Cn%27%3B%20records.forEach%28r%20%3D%3E%20%7B%20const%20row%20%3D%20fields.map%28f%20%3D%3E%20escapeCsv%28r%5Bf%5B0%5D%5D%29%29%3B%20csvContent%20%2B%3D%20row.join%28%27%2C%27%29%20%2B%20%27%5Cr%5Cn%27%3B%20%7D%29%3B%20const%20blob%20%3D%20new%20Blob%28%5BcsvContent%5D%2C%20%7B%20type%3A%20%27text/csv%3Bcharset%3Dutf-8%3B%27%20%7D%29%3B%20const%20url%20%3D%20URL.createObjectURL%28blob%29%3B%20const%20a%20%3D%20document.createElement%28%27a%27%29%3B%20const%20now%20%3D%20new%20Date%28%29%3B%20const%20pad%20%3D%20%28n%29%20%3D%3E%20String%28n%29.padStart%282%2C%20%270%27%29%3B%20const%20ts%20%3D%20%60%24%7Bnow.getFullYear%28%29%7D%24%7Bpad%28now.getMonth%28%29%2B1%29%7D%24%7Bpad%28now.getDate%28%29%29%7D_%24%7Bpad%28now.getHours%28%29%29%7D%24%7Bpad%28now.getMinutes%28%29%29%7D%60%3B%20a.href%20%3D%20url%3B%20a.download%20%3D%20%60ai_interviews_%24%7Bts%7D.csv%60%3B%20document.body.appendChild%28a%29%3B%20a.click%28%29%3B%20document.body.removeChild%28a%29%3B%20URL.revokeObjectURL%28url%29%3B%20updateProgress%28%60%E5%AE%8C%E4%BA%86%EF%BC%81%E5%85%A8%20%24%7Brecords.length%7D%20%E4%BB%B6%E3%82%92%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%60%2C%20100%29%3B%20barEl.style.background%20%3D%20%27%2310b981%27%3B%20closeBtn.style.display%20%3D%20%27block%27%3B%20%7D%20catch%20%28err%29%20%7B%20console.error%28err%29%3B%20updateProgress%28%60%E3%82%A8%E3%83%A9%E3%83%BC%3A%20%24%7Berr.message%7D%60%2C%20100%29%3B%20barEl.style.background%20%3D%20%27%23ef4444%27%3B%20closeBtn.style.display%20%3D%20%27block%27%3B%20%7D%20%7D%29%28%29%3B%20" onclick="alert('このボタンはクリックするのではなく、ブラウザのブックマークバーにドラッグ＆ドロップして登録してください！'); return false;">
-        📥 AI面接CSVダウンロード
-      </a>
+      <div class="tool-desc">
+        Google Meet等の面接文字起こしから、<b>アルサーガ社公式の評価ロジックに完全準拠</b>した能力特性評価（コミュニケーション・モチベーション・スキル・リーダーシップの4軸、各100点満点＋詳細根拠）と、<b>西村氏向け役員上申レポート</b>を一撃生成し、ジョブカンのタイムラインへ自動登録します。（阿曽氏等の事前アサイン作業は不要）
+      </div>
+
+      <div class="drag-area" style="background: #f0fdf4; border-color: #86efac;">
+        <div style="font-size: 13px; font-weight: bold; color: #166534; margin-bottom: 10px;">
+          👇 下の緑ボタンをマウスで掴んで、ブックマークバーにドラッグ＆ドロップしてください
+        </div>
+        <a class="bookmarklet-btn bookmarklet-btn-green" href="javascript:(function(){var s=document.createElement('script');s.src='https://shimonhayashi.github.io/jobcan-ats-exporter/ai_eval.js?t='+Date.now();document.body.appendChild(s);})();" onclick="alert('このボタンはクリックするのではなく、上のブックマークバーにドラッグ＆ドロップして登録してください！'); return false;">
+          📝 AI面接評価＆上申書生成
+        </a>
+      </div>
+
+      <ul class="usage-list">
+        <li><b>使い方</b>: ジョブカンATSの<b>候補者詳細画面（例: candidates/2508）</b>を開いた状態で、登録したブックマークをクリック。</li>
+        <li>専用ウィンドウが開くので、Meet文字起こしのDocsを開いて全選択コピー（Cmd+A→Cmd+C）し、<b>「📋 貼付」</b>を押すだけで一発入力完了。</li>
+        <li>「生成」→ 内容を確認・修正して「タイムラインに反映」を押すと、一次面接・二次面接などの現ステップ名を冠して即座に投稿されます。</li>
+      </ul>
     </div>
 
-    <div class="step-card">
-      <div class="step-title">STEP 2: ジョブカンATSでクリックする</div>
-      <div class="step-desc">
-        1. 通常通りブラウザで <b>ジョブカン採用管理（ATS）</b> にログインします。<br>
-        2. 画面が開いている状態で、先ほどブックマークバーに入れた <b>「AI面接CSVダウンロード」</b> をクリックします。<br>
-        3. 画面右上に進捗バーが表示され、1〜2分で自動的にCSVファイルがダウンロードされます。
+    <!-- ツール2: AI面接CSVダウンロード -->
+    <div class="tool-box">
+      <div class="tool-header">
+        <div class="tool-title">② ジョブカン公式AI面接データ 一括CSVダウンロード</div>
+        <span class="badge">エクスポート</span>
       </div>
+      <div class="tool-desc">
+        ジョブカン採用管理内の公式「AI面接」の全件データを一括取得し、文字起こし・AI要約・評価スコア・候補者情報を結合したCSVファイルを自動ダウンロードします。
+      </div>
+
+      <div class="drag-area" style="background: #eff6ff; border-color: #93c5fd;">
+        <div style="font-size: 13px; font-weight: bold; color: #1e40af; margin-bottom: 10px;">
+          👇 下の青ボタンをマウスで掴んで、ブックマークバーにドラッグ＆ドロップしてください
+        </div>
+        <a class="bookmarklet-btn" href="javascript:(function(){var s=document.createElement('script');s.src='https://shimonhayashi.github.io/jobcan-ats-exporter/export_loader.js?t='+Date.now();document.body.appendChild(s);})();" onclick="alert('このボタンはクリックするのではなく、上のブックマークバーにドラッグ＆ドロップして登録してください！'); return false;">
+          📥 AI面接CSVダウンロード
+        </a>
+      </div>
+
+      <ul class="usage-list">
+        <li><b>使い方</b>: ジョブカンATSを開いた状態で、登録したブックマークをクリックするだけで自動ダウンロードされます。</li>
+      </ul>
     </div>
 
-    <div class="notice">
-      <b>⚠️ 注意事項</b><br>
-      ・ジョブカンATSで「管理者」または「採用担当者」の権限を持つアカウントでログインして実行してください。（選考担当者権限では取得できません）<br>
-      ・大量データ取得時は1〜2分程度かかります。画面を閉じずにお待ちください。
-    </div>
   </div>
 </body>
 </html>
