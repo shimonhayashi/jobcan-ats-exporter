@@ -14,8 +14,9 @@
 
   // 候補者情報をATSから取得
   let candidateName = '取得中...';
-  let currentStepName = '一次面接';
+  let currentStepName = '書類選考';
   let jobOfferName = '';
+  let currentStepObj = null;
 
   try {
     const res = await fetch(`/_/candidates/${candidateId}`, {
@@ -25,7 +26,8 @@
       const data = await res.json();
       candidateName = data.name || `候補者 #${candidateId}`;
       jobOfferName = (data.job_offer && data.job_offer.name) || '';
-      currentStepName = (data.current_step && data.current_step.name) || '面接フェーズ';
+      currentStepObj = data.current_step || (data.passed_steps && data.passed_steps[0]);
+      currentStepName = currentStepObj ? currentStepObj.name : '書類選考';
     }
   } catch (e) {
     console.error('候補者情報取得失敗:', e);
@@ -90,16 +92,34 @@
 
       <!-- プレビュー領域 -->
       <div id="jbc_box_preview" style="display: none;">
+        <div style="margin-bottom: 10px; background: #ecfdf5; padding: 10px 12px; border-radius: 6px; border: 1px solid #a7f3d0; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <span style="font-size: 11px; font-weight: bold; color: #065f46;">反映先: </span>
+            <span style="font-size: 12px; font-weight: bold; color: #047857;">採用フロー・結果 ＞ 【${currentStepName}結果】コメント欄</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <label style="font-size: 11px; font-weight: bold; color: #065f46;">判定:</label>
+            <select id="jbc_select_eval" style="padding: 4px 8px; border: 1px solid #10b981; border-radius: 4px; font-size: 12px; font-weight: bold; background: #fff;">
+              <option value="1">未評価（未）</option>
+              <option value="6">A評価（A）</option>
+              <option value="5">B評価（B）</option>
+              <option value="4">C評価（C）</option>
+              <option value="3">保留（保）</option>
+              <option value="2">不合格（不）</option>
+            </select>
+          </div>
+        </div>
+
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
           <label style="font-weight: bold; font-size: 12px; color: #059669;">
-            生成プレビュー（修正可能・このままATSに反映されます）:
+            生成プレビュー（修正可能・このままATSコメント欄に反映されます）:
           </label>
           <span style="font-size: 11px; color: #64748b;">※自由に編集できます</span>
         </div>
         <textarea id="jbc_text_preview" style="width: 100%; height: 220px; box-sizing: border-box; padding: 8px; border: 2px solid #10b981; border-radius: 6px; font-size: 12px; font-family: monospace; line-height: 1.4; resize: vertical;"></textarea>
 
         <button id="jbc_btn_submit_ats" style="width: 100%; background: #059669; color: #fff; font-weight: bold; padding: 12px 0; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; margin-top: 10px; box-shadow: 0 4px 14px rgba(5,150,105,0.35);">
-          📝 ジョブカンタイムラインに反映する
+          📝 採用フロー・結果の【${currentStepName}結果】コメントに反映する
         </button>
       </div>
 
@@ -120,6 +140,7 @@
   const previewBox = document.getElementById('jbc_box_preview');
   const previewArea = document.getElementById('jbc_text_preview');
   const submitAtsBtn = document.getElementById('jbc_btn_submit_ats');
+  const evalSelect = document.getElementById('jbc_select_eval');
   const statusMsg = document.getElementById('jbc_msg_status');
   const geminiKeyInput = document.getElementById('jbc_gemini_key');
   const savedKey = localStorage.getItem('jbc_gemini_api_key') || '';
@@ -293,7 +314,7 @@ ${transcript.slice(0, 32000)}
     }
   };
 
-  // ジョブカンタイムラインへの投稿
+  // ジョブカン「採用フロー・結果」タブのステップ選考結果コメント欄への反映
   submitAtsBtn.onclick = async () => {
     const finalContent = previewArea.value.trim();
     if (!finalContent) {
@@ -301,7 +322,9 @@ ${transcript.slice(0, 32000)}
       return;
     }
 
-    if (!confirm('この評価レポートをジョブカンタイムラインに投稿しますか？')) {
+    const currentStepTitle = (currentStepObj && currentStepObj.name) || currentStepName || '書類選考';
+
+    if (!confirm(`この評価レポートを「採用フロー・結果」タブの【${currentStepTitle}結果】コメント欄に反映しますか？`)) {
       return;
     }
 
@@ -310,34 +333,86 @@ ${transcript.slice(0, 32000)}
 
     try {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-      const postRes = await fetch('/_/candidate_comments', {
-        method: 'POST',
+      
+      // 最新のステップ情報を取得
+      let stepId = currentStepObj ? currentStepObj.id : null;
+      let stepStatus = currentStepObj ? currentStepObj.status : 1;
+      let lockVersion = currentStepObj ? currentStepObj.lock_version : 0;
+      let existingEvaluation = { id: parseInt(evalSelect.value, 10) || 1 };
+      let existingFeedback = '';
+
+      try {
+        const candResp = await fetch(`/_/candidates/${candidateId}`, {
+          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        if (candResp.ok) {
+          const candData = await candResp.json();
+          const targetStep = candData.current_step || (candData.passed_steps && candData.passed_steps[0]);
+          if (targetStep) {
+            stepId = targetStep.id;
+            stepStatus = targetStep.status;
+            lockVersion = targetStep.lock_version;
+          }
+        }
+      } catch (e) {
+        console.warn('最新ステップ取得フォールバック:', e);
+      }
+
+      if (!stepId) {
+        throw new Error('対象の選考ステップIDが特定できませんでした。');
+      }
+
+      // 評価パラメータから既存値の補完
+      try {
+        const evalResp = await fetch(`/_/candidate_steps/${stepId}/evaluation_parameters`, {
+          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        if (evalResp.ok) {
+          const evalData = await evalResp.json();
+          if (evalData.step_evaluation) {
+            existingFeedback = evalData.step_evaluation.feedback_comment || '';
+          }
+        }
+      } catch (e) {
+        console.warn('評価パラメータ取得スキップ:', e);
+      }
+
+      const putPayload = {
+        status: stepStatus,
+        next_job_offer_step_id: null,
+        lock_version: lockVersion,
+        candidate_step_evaluation: {
+          evaluation: existingEvaluation,
+          evaluation_comment: finalContent,
+          feedback_comment: existingFeedback
+        }
+      };
+
+      const putRes = await fetch(`/_/candidate_steps/${stepId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'X-CSRF-Token': csrfToken,
           'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({
-          candidate_id: parseInt(candidateId, 10),
-          content: finalContent
-        })
+        body: JSON.stringify(putPayload)
       });
 
-      if (!postRes.ok) {
-        const errJson = await postRes.json().catch(() => ({}));
-        throw new Error(errJson.message || `HTTP ${postRes.status}`);
+      if (!putRes.ok) {
+        const errJson = await putRes.json().catch(() => ({}));
+        throw new Error(errJson.message || `HTTP ${putRes.status}`);
       }
 
-      alert('🎉 ジョブカンのタイムラインに正常に反映されました！');
+      alert(`🎉 採用フロー・結果タブの【${currentStepTitle}結果】コメント欄に正常に反映されました！`);
       overlay.remove();
       location.reload();
 
     } catch (err) {
       console.error(err);
-      alert('ジョブカンへの投稿に失敗しました: ' + err.message);
+      alert('採用フローへの反映に失敗しました: ' + err.message);
       submitAtsBtn.disabled = false;
-      submitAtsBtn.innerText = '📝 ジョブカンタイムラインに反映する';
+      submitAtsBtn.innerText = `📝 採用フロー・結果の【${currentStepTitle}結果】コメントに反映する`;
     }
   };
 
