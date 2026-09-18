@@ -174,7 +174,7 @@
     generateBtn.disabled = true;
     generateBtn.style.background = '#94a3b8';
     generateBtn.innerText = '⏳ アルサーガ評価基準で解析中... (約15〜25秒)';
-    statusMsg.innerText = 'Gemini 2.0 Flash で能力特性・根拠・上申サマリーを生成中...';
+    statusMsg.innerText = 'Gemini 3.6 Flash で能力特性・根拠・上申サマリーを生成中...';
     statusMsg.style.color = '#2563eb';
 
     const phaseName = stepInput.value.trim() || '面接';
@@ -258,7 +258,7 @@ ${transcript.slice(0, 32000)}
 `;
 
     try {
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
       const resp = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
